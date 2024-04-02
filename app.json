@@ -1,0 +1,32 @@
+{
+  "expo": {
+    "name": "SMSC Library",
+    "slug": "libteach",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/splashlogo.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splashlogo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff",
+      "height": 200, 
+      "width": 400   
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/splashlogo.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./assets/splashlogo.png"
+    }
+  }
+}
