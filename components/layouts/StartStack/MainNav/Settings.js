@@ -2,13 +2,18 @@ import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, TextInput } from "react-native";
 import { FontAwesome } from '@expo/vector-icons'; // Import FontAwesome for icons
 import * as SecureStore from "expo-secure-store";
+import { useFocusEffect } from '@react-navigation/native'; // Import useFocusEffect
 
 export default function SettingsScreen({ navigation }) {
   const [userDetails, setUserDetails] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    fetchUserDetails();
-  }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchUserDetails();
+    }, [])
+  );
 
   const fetchUserDetails = async () => {
     try {
@@ -25,19 +30,26 @@ export default function SettingsScreen({ navigation }) {
       console.log(data);
     } catch (error) {
       console.error("Error fetching user details:", error);
+    }finally {
+      setLoading(false); // Set loading to false after fetching data
     }
   };
 
   const handleSignOut = async () => {
     await SecureStore.deleteItemAsync("token");
-    navigation.navigate("Login");
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Login' }],
+    });
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Teacher Details</Text>
       <View style={styles.userDetailsContainer}>
-        {userDetails ? (
+      {loading ? (
+          <ActivityIndicator size="large" color="#007bff" />
+        ) : userDetails ? (
           <>
             <View style={styles.inputGroup}>
               <View style={{ flexDirection: "row", alignItems: "center" }}>

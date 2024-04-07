@@ -12,7 +12,7 @@ const StudentBox = ({ student, index }) => {
       toValue: 1,
       duration: 1000, // Duration of animation in milliseconds
       easing: Easing.linear, // Easing function
-      delay: index * 500, // Delay each StudentBox by 500 milliseconds
+      delay: index * 50, // Delay each StudentBox by 500 milliseconds
       useNativeDriver: true, // Use native driver for better performance
     });
     animation.start();
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 5,
-    color:"rgba(8, 88, 225, 1)",
+    color:"#EE0823",
     letterSpacing: 0.5,
   },
   studentName: {

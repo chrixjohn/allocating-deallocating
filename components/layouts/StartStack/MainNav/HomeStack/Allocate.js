@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { StatusBar, Switch } from "react-native";
 import { Appbar, Avatar, ActivityIndicator, Button } from "react-native-paper";
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 import {
   StyleSheet,
   View,
@@ -32,7 +34,7 @@ const BoxComponent = ({
       toValue: 1,
       duration: 1000, // Duration of animation in milliseconds
       easing: Easing.linear, // Easing function
-      delay: index * 200, // Delay each BookBox by 500 milliseconds
+      delay: index * 50, // Delay each BookBox by 500 milliseconds
       useNativeDriver: true, // Use native driver for better performance
     });
     animation.start();
@@ -118,6 +120,8 @@ export default function App() {
   const [selectedChart, setselectedChart] = useState("Allocate");
   const [isOpen, setIsOpen] = useState(false);
   const [currentValue, setCurrentValue] = useState([]);
+  const CustomTickIcon = () => <Icon name="times" size={16} color="black" />;
+
 
   const toggleChart = (chartType) => {
     setselectedChart(chartType);
@@ -315,6 +319,7 @@ export default function App() {
                       fontWeight: "bold",
                       fontSize: 16,
                     }}
+                    BadgeIconComponent={CustomTickIcon} // Use custom tick icon component
                     showTickIcon={true}
                     showArrowIcon={true}
                     disableBorderRadius={true}

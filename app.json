@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "SMSC Library",
+    "name": "SMSS Library",
     "slug": "libteach",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -9,9 +9,8 @@
     "splash": {
       "image": "./assets/splashlogo.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff",
-      "height": 200, 
-      "width": 400   
+      "backgroundColor": "#ffffff"
+       
     },
     "assetBundlePatterns": [
       "**/*"

@@ -67,7 +67,7 @@ export default function LoginForm() {
           setTeacherId("");
           const token = response.headers.get("x-authtoken");
           await SecureStore.setItemAsync("token", token);
-          navigation.dispatch(StackActions.replace('Main'));
+          navigation.dispatch(StackActions.replace('Main')); // Navigate to the menu screen
         } else {
           alert("Invalid credentials. Please try again.");
         }
@@ -76,7 +76,6 @@ export default function LoginForm() {
         alert("An error occurred. Please try again later.");
       })
       .finally(() => {
-        console.log("chris");
         setIsLoading(false); // Set loading state to false after request completes
       });
   };

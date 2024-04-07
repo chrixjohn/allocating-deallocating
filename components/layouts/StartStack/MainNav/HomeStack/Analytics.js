@@ -10,7 +10,7 @@ const BoxComponent = ({ allocation, index }) => {
     const animation = Animated.timing(opacity, {
       toValue: 1,
       duration: 1000,
-      delay: index * 500, // Delay each BoxComponent by 500 milliseconds
+      delay: index * 50, // Delay each BoxComponent by 500 milliseconds
       useNativeDriver: true,
     });
     animation.start();
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 0,
-    color: "rgba(8, 88, 225, 1)",
+    color:"#EE0823",
     letterSpacing: 0.5,
   },
   bookText: {

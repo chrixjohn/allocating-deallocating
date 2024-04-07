@@ -1,3 +1,5 @@
+// StartStack.js
+
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
@@ -14,8 +16,7 @@ const StartStack = () => {
       <Stack.Screen
         name="Login"
         component={LoginScreen}
-        options={{ headerShown: false ,
-          animation: 'slide_from_bottom',}} // Remove the header for the Login screen
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Main"

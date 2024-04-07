@@ -1,18 +1,15 @@
 import React from "react";
-import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { useNavigation, useRoute } from '@react-navigation/native'; // Import useNavigation and useRoute hooks
+import { FontAwesome } from '@expo/vector-icons';
+import { TouchableOpacity } from 'react-native';
+import { Ionicons } from "@expo/vector-icons";
 
 import HomeScreen from "./MainNav/Home";
-import InfoScreen from "./MainNav/Info";
 import SettingsScreen from "./MainNav/Settings";
 
 const Tab = createBottomTabNavigator();
 
 export default function MainScreen() {
-  const route = useRoute(); // Get the route object
-  const navigation = useNavigation(); // Get the navigation object
-
   return (
     <Tab.Navigator
       screenOptions={{
@@ -29,6 +26,7 @@ export default function MainScreen() {
         tabBarIconStyle: {
           // Any specific styles for tabBarIcon can be added here
         },
+        headerShown: false, // Hide the header by default
         headerShadowVisible: false, // Remove header shadow
       }}
     >
@@ -36,39 +34,29 @@ export default function MainScreen() {
         name="Home"
         component={HomeScreen}
         options={{
-          headerTitle: 'St Marys Sunday School',
-          headerStyle: { backgroundColor: '#155cd4' },
-          headerTitleStyle: { fontWeight: '900',color:'#ffff' },
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="home-sharp" size={size} color={color} />
           ),
-          headerLeft: () => {
-            if (route.name !== "Home") { // Check if the current route is not the initial screen
-              return (
-                <Ionicons
-                  name="chevron-back"
-                  size={24}
-                  color="white"
-                  style={{ marginLeft: 10 }}
-                  onPress={() => navigation.goBack()}
-                />
-              );
-            }
-            return null;
-          },
         }}
       />
 
-      <Tab.Screen
-        name="Settings"
-        component={SettingsScreen}
-        options={{
-          headerTitle: 'St Marys Sunday School',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="settings-outline" size={size} color={color} />
-          ),
-        }}
-      />
+<Tab.Screen
+  name="UserDetails"
+  component={SettingsScreen}
+  options={({ navigation }) => ({
+    headerShown: true,
+    headerTitle: 'St Marys Sunday School',
+    headerTitleStyle: { fontWeight: '900' },
+    headerLeft: () => (
+      <TouchableOpacity onPress={() => navigation.goBack(navigation)}>
+        <Ionicons name="chevron-back-outline" size={24} color="black" style={{ marginLeft: 15 }} />
+      </TouchableOpacity>
+    ),
+    tabBarIcon: ({ color, size }) => (
+      <FontAwesome name="user" size={size} color={color} />
+    ),
+  })}
+/>
     </Tab.Navigator>
   );
 }

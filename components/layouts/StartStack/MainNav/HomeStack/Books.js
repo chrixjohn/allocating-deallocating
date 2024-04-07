@@ -12,7 +12,7 @@ const BookBox = ({ book, index }) => {
       toValue: 1,
       duration: 1000, // Duration of animation in milliseconds
       easing: Easing.linear, // Easing function
-      delay: index * 500, // Delay each BookBox by 500 milliseconds
+      delay: index * 50, // Delay each BookBox by 500 milliseconds
       useNativeDriver: true, // Use native driver for better performance
     });
     animation.start();
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
   bookId: {
     fontSize: 18,
     fontWeight: "bold",
-    color:"rgba(8, 88, 225, 1)",
+    color:"#EE0823",
     letterSpacing: 0.5,
     marginBottom: 5, // Added margin bottom for spacing
   },
