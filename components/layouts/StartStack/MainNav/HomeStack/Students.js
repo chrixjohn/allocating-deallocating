@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { Appbar, Text, ActivityIndicator } from "react-native-paper";
-import { StyleSheet, View, ScrollView, Animated, Easing } from "react-native";
+import { StyleSheet, View, ScrollView, Animated, Easing, Alert } from "react-native";
 import * as SecureStore from "expo-secure-store";
+import NetInfo from "@react-native-community/netinfo";
 
 const StudentBox = ({ student, index }) => {
-  const [fadeAnim] = useState(new Animated.Value(0)); // Initial value for opacity animation
+  const [fadeAnim] = useState(new Animated.Value(0));
 
   useEffect(() => {
-    // Start opacity animation with delay when component mounts
     const animation = Animated.timing(fadeAnim, {
       toValue: 1,
-      duration: 1000, // Duration of animation in milliseconds
-      easing: Easing.linear, // Easing function
-      delay: index * 50, // Delay each StudentBox by 500 milliseconds
-      useNativeDriver: true, // Use native driver for better performance
+      duration: 1000,
+      easing: Easing.linear,
+      delay: index * 50,
+      useNativeDriver: true,
     });
     animation.start();
-    return () => animation.stop(); // Cleanup animation
+    return () => animation.stop();
   }, []);
 
   return (
@@ -30,7 +30,18 @@ const StudentBox = ({ student, index }) => {
 export default function Students() {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [fadeAnim] = useState(new Animated.Value(0)); // Initial value for opacity animation
+  const [fadeAnim] = useState(new Animated.Value(0));
+  const [isConnected, setIsConnected] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener(state => {
+      setIsConnected(state.isConnected);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   const fetchStudents = async () => {
     try {
@@ -47,26 +58,32 @@ export default function Students() {
       );
 
       if (!response.ok) {
-        throw new Error("Failed to fetch students");
+        if (response.status === 404) {
+          throw new Error("Server not found");
+        } else {
+          throw new Error("Failed to fetch students");
+        }
       }
 
       const responseData = await response.json();
       setStudents(responseData);
-      setLoading(false); // Set loading to false after fetching data
-      animateAppbar(); // Start animation after data is fetched
+      setLoading(false);
+      animateAppbar();
     } catch (error) {
       console.error("Error fetching data:", error);
       setLoading(false);
+      if (error.message === "Server not found") {
+        Alert.alert("Server Not Found", "The server could not be reached.");
+      }
     }
   };
 
   const animateAppbar = () => {
-    // Start opacity animation for Appbar
     Animated.timing(fadeAnim, {
       toValue: 1,
-      duration: 1000, // Duration of animation in milliseconds
-      easing: Easing.linear, // Easing function
-      useNativeDriver: true, // Use native driver for better performance
+      duration: 1000,
+      easing: Easing.linear,
+      useNativeDriver: true,
     }).start();
   };
 
@@ -76,6 +93,11 @@ export default function Students() {
 
   return (
     <View style={{ flex: 1 }}>
+      {!isConnected && (
+        <View style={styles.connectionStatus}>
+          <Text style={styles.connectionText}>No Internet Connection</Text>
+        </View>
+      )}
       <View style={styles.mainContainer}>
         <Animated.View style={[styles.appbar, { opacity: fadeAnim }]}>
           <Text style={styles.appbarText}>Students</Text>
@@ -95,7 +117,7 @@ export default function Students() {
                 <StudentBox
                   key={index}
                   student={student}
-                  index={index} // Pass index to StudentBox
+                  index={index}
                 />
               ))}
             </ScrollView>
@@ -106,14 +128,13 @@ export default function Students() {
   );
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     backgroundColor: "#ffff",
     alignItems: "center",
     justifyContent: "center",
-    height: "85%", // Adjust height as needed
+    height: "85%",
     width: "100%",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
@@ -141,7 +162,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   appbarText: {
-    color:"white",
+    color: "white",
     fontSize: 25,
     fontWeight: "700",
   },
@@ -156,7 +177,7 @@ const styles = StyleSheet.create({
     color: "red",
     marginTop: 18,
     textAlign: "center",
-    fontWeight:"700",
+    fontWeight: "700",
   },
   studentBox: {
     backgroundColor: "#3278D680",
@@ -169,17 +190,27 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 5,
-    color:"#EE0823",
+    color: "#EE0823",
     letterSpacing: 0.5,
   },
   studentName: {
     fontSize: 16,
     fontWeight: "bold",
-    color:"black"
+    color: "black",
   },
   loadingIndicator: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  connectionStatus: {
+    backgroundColor: "red",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 10,
+  },
+  connectionText: {
+    color: "white",
+    fontSize: 16,
   },
 });
