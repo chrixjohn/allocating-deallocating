@@ -186,7 +186,7 @@ export default function App() {
       }));
 
       setFreeItems(allocatedDatas);
-      console.log("john", freeItems);
+      console.log(freeItems);
 
       // Fetching Students
       let response = await fetch(
@@ -214,7 +214,7 @@ export default function App() {
         }
       );
       responseData = await response.json();
-      console.log("chris", responseData);
+      console.log(responseData);
       const data = responseData.map((item) => ({
         label: `${item.id} - ${item.name} `, // Include both name and id in the label
         value: item.id,
