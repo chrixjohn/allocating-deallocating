@@ -2,6 +2,9 @@
 
 An app for managing allocating and deallocating of books given to students by the teacher for a Sunday School Library.
 
+userid-T025
+pass-123
+
 
 
 ## Running App
