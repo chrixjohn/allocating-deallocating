@@ -61,10 +61,10 @@ export default function Analytics() {
       }
 
       const responseData = await response.json();
-      console.log("chris joyhn", responseData.data[0]);
+      console.log(responseData.data[0]);
       setAllocation(responseData.data);
       setLoading(false);
-      console.log("chris joyhn", responseData.data[0]);
+      console.log(responseData.data[0]);
     } catch (error) {
       console.error("Error fetching data:", error);
       setLoading(false);
