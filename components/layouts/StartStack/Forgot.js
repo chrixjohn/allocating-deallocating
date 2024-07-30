@@ -5,7 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Alert,
+  Alert,StatusBar,
 } from "react-native";
 
 const ForgotPasswordScreen = () => {
@@ -39,6 +39,7 @@ const ForgotPasswordScreen = () => {
 
   return (
     <View style={styles.container}>
+      <StatusBar backgroundColor="#ffff" barStyle="dark-content" />
       <Text style={styles.heading}>Forgot Password</Text>
       <TextInput
         style={styles.input}

@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import StartStack from "./components/layouts/StartStack";
 import { NavigationContainer } from "@react-navigation/native";
+import "react-native-gesture-handler";
 
 export default function App() {
   return (

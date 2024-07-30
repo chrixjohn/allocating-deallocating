@@ -1,13 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, TextInput } from "react-native";
-import { FontAwesome } from '@expo/vector-icons'; // Import FontAwesome for icons
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  TextInput,
+  StatusBar,
+  ScrollView, // Import ScrollView
+  ActivityIndicator,
+} from "react-native";
+import { FontAwesome } from "@expo/vector-icons"; // Import FontAwesome for icons
 import * as SecureStore from "expo-secure-store";
-import { useFocusEffect } from '@react-navigation/native'; // Import useFocusEffect
+import { useFocusEffect } from "@react-navigation/native"; // Import useFocusEffect
 
 export default function SettingsScreen({ navigation }) {
   const [userDetails, setUserDetails] = useState(null);
   const [loading, setLoading] = useState(false);
-
 
   useFocusEffect(
     React.useCallback(() => {
@@ -18,19 +26,22 @@ export default function SettingsScreen({ navigation }) {
   const fetchUserDetails = async () => {
     try {
       const token = await SecureStore.getItemAsync("token");
-      const response = await fetch("https://sunday-library.onrender.com/teacher/details", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "x-authtoken": token,
-        },
-      });
+      const response = await fetch(
+        "https://sunday-library.onrender.com/teacher/details",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "x-authtoken": token,
+          },
+        }
+      );
       const data = await response.json();
       setUserDetails(data);
       console.log(data);
     } catch (error) {
       console.error("Error fetching user details:", error);
-    }finally {
+    } finally {
       setLoading(false); // Set loading to false after fetching data
     }
   };
@@ -39,91 +50,122 @@ export default function SettingsScreen({ navigation }) {
     await SecureStore.deleteItemAsync("token");
     navigation.reset({
       index: 0,
-      routes: [{ name: 'Login' }],
+      routes: [{ name: "Login" }],
     });
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Teacher Details</Text>
-      <View style={styles.userDetailsContainer}>
-      {loading ? (
-          <ActivityIndicator size="large" color="#007bff" />
-        ) : userDetails ? (
-          <>
-            <View style={styles.inputGroup}>
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <FontAwesome name="user" size={24} color="#007bff" style={styles.icon} />
-                <Text style={styles.label}>Name</Text>
+    <ScrollView contentContainerStyle={styles.scrollContainer}> 
+      <StatusBar backgroundColor="#ffff" barStyle="dark-content" />
+      <View style={styles.container}>
+        <Text style={styles.title}>Teacher Details</Text>
+        <View style={styles.userDetailsContainer}>
+          {loading ? (
+            <ActivityIndicator size="large" color="#007bff" />
+          ) : userDetails ? (
+            <>
+              <View style={styles.inputGroup}>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <FontAwesome
+                    name="user"
+                    size={24}
+                    color="#007bff"
+                    style={styles.icon}
+                  />
+                  <Text style={styles.label}>Name</Text>
+                </View>
+                <TextInput
+                  style={styles.textInput}
+                  value={userDetails.name}
+                  editable={false}
+                  placeholderTextColor="#555"
+                />
               </View>
-              <TextInput
-                style={styles.textInput}
-                value={userDetails.name}
-                editable={false}
-                placeholderTextColor="#555"
-              />
-            </View>
-            <View style={styles.inputGroup}>
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <FontAwesome name="envelope" size={24} color="#007bff" style={styles.icon} />
-                <Text style={styles.label}>Email</Text>
+              <View style={styles.inputGroup}>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <FontAwesome
+                    name="envelope"
+                    size={24}
+                    color="#007bff"
+                    style={styles.icon}
+                  />
+                  <Text style={styles.label}>Email</Text>
+                </View>
+                <TextInput
+                  style={styles.textInput}
+                  value={userDetails.email}
+                  editable={false}
+                  placeholderTextColor="#555"
+                />
               </View>
-              <TextInput
-                style={styles.textInput}
-                value={userDetails.email}
-                editable={false}
-                placeholderTextColor="#555"
-              />
-            </View>
-            <View style={styles.inputGroup}>
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <FontAwesome name="graduation-cap" size={24} color="#007bff" style={styles.icon} />
-                <Text style={styles.label}>Class Name</Text>
+              <View style={styles.inputGroup}>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <FontAwesome
+                    name="graduation-cap"
+                    size={24}
+                    color="#007bff"
+                    style={styles.icon}
+                  />
+                  <Text style={styles.label}>Class Name</Text>
+                </View>
+                <TextInput
+                  style={styles.textInput}
+                  value={userDetails.classname}
+                  editable={false}
+                  placeholderTextColor="#555"
+                />
               </View>
-              <TextInput
-                style={styles.textInput}
-                value={userDetails.classname}
-                editable={false}
-                placeholderTextColor="#555"
-              />
-            </View>
-            <View style={styles.inputGroup}>
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <FontAwesome name="users" size={24} color="#007bff" style={styles.icon} />
-                <Text style={styles.label}>Students</Text>
+              <View style={styles.inputGroup}>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <FontAwesome
+                    name="users"
+                    size={24}
+                    color="#007bff"
+                    style={styles.icon}
+                  />
+                  <Text style={styles.label}>Students</Text>
+                </View>
+                <TextInput
+                  style={styles.textInput}
+                  value={userDetails.student_count}
+                  editable={false}
+                  placeholderTextColor="#555"
+                />
               </View>
-              <TextInput
-                style={styles.textInput}
-                value={userDetails.student_count}
-                editable={false}
-                placeholderTextColor="#555"
-              />
-            </View>
-            <View style={styles.inputGroup}>
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <FontAwesome name="book" size={24} color="#007bff" style={styles.icon} />
-                <Text style={styles.label}>Allocated Books</Text>
+              <View style={styles.inputGroup}>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <FontAwesome
+                    name="book"
+                    size={24}
+                    color="#007bff"
+                    style={styles.icon}
+                  />
+                  <Text style={styles.label}>Allocated Books</Text>
+                </View>
+                <TextInput
+                  style={styles.textInput}
+                  value={userDetails.allocated_books_count}
+                  editable={false}
+                  placeholderTextColor="#555"
+                />
               </View>
-              <TextInput
-                style={styles.textInput}
-                value={userDetails.allocated_books_count}
-                editable={false}
-                placeholderTextColor="#555"
-              />
-            </View>
-          </>
-        ) : (
-          <Text style={styles.loadingText}>Loading...</Text>
-        )}
+            </>
+          ) : (
+            <Text style={styles.loadingText}>Loading...</Text>
+          )}
+        </View>
+        <TouchableOpacity style={styles.button} onPress={handleSignOut}>
+          <Text style={styles.buttonText}>Sign Out</Text>
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.button} onPress={handleSignOut}>
-        <Text style={styles.buttonText}>Sign Out</Text>
-      </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    flexGrow: 1,
+  },
   container: {
     flex: 1,
     justifyContent: "center",
@@ -156,16 +198,17 @@ const styles = StyleSheet.create({
     marginLeft: 5, // Add margin to separate icon and label
     color: "#333",
     fontWeight: "bold", // Make text bold
+    marginBottom: 5,
   },
   textInput: {
     width: "100%", // Set width to 100%
-    height: 50,
+    height: 45,
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 5,
     padding: 10,
     color: "#333", // Set text color
-    marginTop: 0, // Add margin to place it from
+    // marginTop: 0, // Add margin to place it from
     fontSize: 16, // Increase font size
     fontWeight: "600", // Make text bold
   },
@@ -187,5 +230,6 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginRight: 10,
+    marginBottom: 5,
   },
 });

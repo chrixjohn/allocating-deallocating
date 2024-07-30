@@ -1,8 +1,9 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { FontAwesome } from '@expo/vector-icons';
-import { TouchableOpacity } from 'react-native';
+import { FontAwesome } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { StatusBar } from "react-native"; // Import StatusBar
 
 import HomeScreen from "./MainNav/Home";
 import SettingsScreen from "./MainNav/Settings";
@@ -10,18 +11,19 @@ import SettingsScreen from "./MainNav/Settings";
 const Tab = createBottomTabNavigator();
 
 export default function MainScreen() {
+  
   return (
     <Tab.Navigator
       screenOptions={{
         tabBarStyle: {
           borderTopWidth: 0,
-          backgroundColor: '#ffff',
-          color: '#ffff',
-          borderColor: 'blue',
+          backgroundColor: "#ffff",
+          color: "#ffff",
+          borderColor: "blue",
         },
         tabBarLabelStyle: {
-          fontWeight: '500',
-          color: '#000',
+          fontWeight: "500",
+          color: "#000",
         },
         tabBarIconStyle: {
           // Any specific styles for tabBarIcon can be added here
@@ -40,23 +42,28 @@ export default function MainScreen() {
         }}
       />
 
-<Tab.Screen
-  name="UserDetails"
-  component={SettingsScreen}
-  options={({ navigation }) => ({
-    headerShown: true,
-    headerTitle: 'St Marys Sunday School',
-    headerTitleStyle: { fontWeight: '900' },
-    headerLeft: () => (
-      <TouchableOpacity onPress={() => navigation.goBack(navigation)}>
-        <Ionicons name="chevron-back-outline" size={24} color="black" style={{ marginLeft: 15 }} />
-      </TouchableOpacity>
-    ),
-    tabBarIcon: ({ color, size }) => (
-      <FontAwesome name="user" size={size} color={color} />
-    ),
-  })}
-/>
+      <Tab.Screen
+        name="User"
+        component={SettingsScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: "St Marys Sunday School",
+          headerTitleStyle: { fontWeight: "900" },
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack(navigation)}>
+              <Ionicons
+                name="chevron-back-outline"
+                size={24}
+                color="black"
+                style={{ marginLeft: 15 }}
+              />
+            </TouchableOpacity>
+          ),
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome name="user" size={size} color={color} />
+          ),
+        })}
+      />
     </Tab.Navigator>
   );
 }

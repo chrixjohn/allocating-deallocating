@@ -7,10 +7,12 @@ import {
   ActivityIndicator,
   StyleSheet,
   Animated,
+  
 } from "react-native";
 import { Appbar, Avatar } from "react-native-paper";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native"; // Import useFocusEffect
 import * as SecureStore from "expo-secure-store";
+import { StatusBar } from 'expo-status-bar';
 
 const BoxComponent = ({ text, imageSource }) => (
   <Animated.View animation="fadeIn" duration={1000} style={[styles.box]}>
@@ -59,8 +61,22 @@ function Menu() {
     }).start();
   };
 
+  // Use useFocusEffect to change status bar color when Menu screen is focused
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     StatusBar.setBackgroundColor("#155cd4"); // Set status bar background color to blue
+  //     StatusBar.setBarStyle("light-content"); // Set status bar content color to light
+  //     return () => {
+  //       // Reset status bar color when leaving Menu screen
+  //       StatusBar.setBackgroundColor("transparent"); // Reset status bar background color
+  //       StatusBar.setBarStyle("dark-content"); // Set status bar content color to dark
+  //     };
+  //   }, [])
+  // );
+
   return (
     <View style={{ flex: 1 }}>
+      <StatusBar backgroundColor="#155cd4" barStyle="light-content" />
       <View style={styles.mainContainer}>
         <Appbar style={styles.appbar}>
           <View style={styles.appbarContent}>
@@ -131,6 +147,7 @@ function Menu() {
           </View>
         )}
       </View>
+      
     </View>
   );
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Appbar, ActivityIndicator } from "react-native-paper";
-import { StyleSheet, View, Text, ScrollView, Animated } from "react-native";
+import { StyleSheet, View, Text, ScrollView, Animated,StatusBar, } from "react-native";
 import * as SecureStore from "expo-secure-store";
 
 const BoxComponent = ({ allocation, index }) => {
@@ -77,6 +77,7 @@ export default function Analytics() {
 
   return (
     <View style={{ flex: 1 }}>
+      <StatusBar backgroundColor="#155cd4" barStyle="light-content" />
       <View style={styles.mainContainer}>
         <Appbar style={styles.appbar}>
           <Text style={styles.appbarText}>Analytics</Text>

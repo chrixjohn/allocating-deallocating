@@ -6,7 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
-  Animated, // Import Animated from React Native
+  Animated, StatusBar,// Import Animated from React Native
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome } from '@expo/vector-icons'; // Import FontAwesome icons
@@ -82,6 +82,7 @@ export default function LoginForm() {
 
   return (
     <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
+      <StatusBar backgroundColor="#FAF3F0" barStyle="dark-content" />
       <Text style={styles.title}>Sunday School Library</Text>
       <Image source={logo} style={styles.logo} />
       <View style={styles.inputView}>

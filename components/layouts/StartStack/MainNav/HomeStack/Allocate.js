@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { StatusBar, Switch } from "react-native";
+
 import { Appbar, Avatar, ActivityIndicator, Button } from "react-native-paper";
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from "react-native-vector-icons/FontAwesome";
 
 import {
   StyleSheet,
@@ -9,7 +9,9 @@ import {
   Text,
   ScrollView,
   TextInput,
-  TouchableOpacity, Animated, Easing
+  TouchableOpacity,
+  Animated,
+  Easing,StatusBar, Switch,
 } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import * as SecureStore from "expo-secure-store";
@@ -21,27 +23,30 @@ const BoxComponent = ({
   data,
   student,
   onSelectBook,
-  availableBooks,index
+  availableBooks,
+  index,
 }) => {
   const id = student.id;
   const [value, setValue] = useState(null);
   const [placeholderText, setPlaceholderText] = useState("Select Book");
   const [fadeAnim] = useState(new Animated.Value(0)); // Initial value for opacity animation
 
-
-  useEffect(() => {
-    const animation = Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 1000, // Duration of animation in milliseconds
-      easing: Easing.linear, // Easing function
-      delay: index * 50, // Delay each BookBox by 500 milliseconds
-      useNativeDriver: true, // Use native driver for better performance
-    });
-    animation.start();
-    setValue(null); // Reset selected value when the component re-renders
-    return () => animation.stop(); // Cleanup animation
-    
-  }, [index],[availableBooks]); // Reset selected value when availableBooks changes
+  useEffect(
+    () => {
+      const animation = Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 1000, // Duration of animation in milliseconds
+        easing: Easing.linear, // Easing function
+        delay: index * 50, // Delay each BookBox by 500 milliseconds
+        useNativeDriver: true, // Use native driver for better performance
+      });
+      animation.start();
+      setValue(null); // Reset selected value when the component re-renders
+      return () => animation.stop(); // Cleanup animation
+    },
+    [index],
+    [availableBooks]
+  ); // Reset selected value when availableBooks changes
 
   const handleValueChange = (item) => {
     setValue(item.value);
@@ -72,7 +77,7 @@ const BoxComponent = ({
           onChange={handleValueChange} // Call handleValueChange directly
         />
       </View>
-      </Animated.View>
+    </Animated.View>
   );
 };
 
@@ -122,20 +127,37 @@ export default function App() {
   const [currentValue, setCurrentValue] = useState([]);
   const CustomTickIcon = () => <Icon name="times" size={16} color="black" />;
 
-
   const toggleChart = (chartType) => {
     setselectedChart(chartType);
     // Toggle between pages based on the selected chart type
-    if (chartType === "deallocate") {
+    if (chartType === "Deallocate") {
       fetchData(); // Fetch data if not already fetched
       console.log("deallocate");
       setDataFetched(true); // Set dataFetched to true to avoid fetching data multiple times
-    }
-    else if (chartType === "allocate") {
+    } else if (chartType === "Allocate") {
+      setAvailableBooks([]);
+      setSelectedBooks([]);
       fetchData(); // Fetch data if not already fetched
       console.log("allocate");
-      fetchData(); 
+
       setDataFetched(true); // Set dataFetched to true to avoid fetching data multiple times
+    }
+  };
+  const ClearallocateBooks = async () => {
+    setLoading(true); // Set loading state to true when clearing allocated books
+
+    try {
+      // Clear selected books and available books
+      setSelectedBooks({});
+      setAvailableBooks([]);
+      // Fetch fresh data
+      await fetchData();
+      //alert("Books Cleared Successfully");
+    } catch (error) {
+      console.error("Error:", error);
+      //alert("Error Clearing Books");
+    } finally {
+      setLoading(false); // Reset loading state after request completes
     }
   };
 
@@ -273,31 +295,43 @@ export default function App() {
   return (
     <>
       <View style={styles.main}></View>
-
+      <StatusBar backgroundColor="#155cd4" barStyle="light-content" />
       <View style={styles.container}>
         <View style={styles.toggleContainer}>
-        <TouchableOpacity
-  style={[
-    styles.toggleButton,
-    selectedChart === "Allocate" && styles.selectedButton,
-    selectedChart === "Allocate" && { color: "#fff" }, // Add this line
-  ]}
-  onPress={() => toggleChart("Allocate")}
->
-  <Text style={[styles.buttonText, selectedChart === "Allocate" && { color: "#fff" }]}>Allocation</Text>
-</TouchableOpacity>
-<TouchableOpacity
-  style={[
-    styles.toggleButton,
-    selectedChart === "Deallocate" && styles.selectedButton,
-    selectedChart === "Deallocate" && { color: "#fff" }, // Add this line
-  ]}
-  onPress={() => toggleChart("Deallocate")}
->
-  <Text style={[styles.buttonText, selectedChart === "Deallocate" && { color: "#fff" }]}>Deallocation</Text>
-</TouchableOpacity>
-
-
+          <TouchableOpacity
+            style={[
+              styles.toggleButton,
+              selectedChart === "Allocate" && styles.selectedButton,
+              selectedChart === "Allocate" && { color: "#fff" }, // Add this line
+            ]}
+            onPress={() => toggleChart("Allocate")}
+          >
+            <Text
+              style={[
+                styles.buttonText,
+                selectedChart === "Allocate" && { color: "#fff" },
+              ]}
+            >
+              Allocation
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.toggleButton,
+              selectedChart === "Deallocate" && styles.selectedButton,
+              selectedChart === "Deallocate" && { color: "#fff" }, // Add this line
+            ]}
+            onPress={() => toggleChart("Deallocate")}
+          >
+            <Text
+              style={[
+                styles.buttonText,
+                selectedChart === "Deallocate" && { color: "#fff" },
+              ]}
+            >
+              Deallocation
+            </Text>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.contentContainer}>
@@ -345,9 +379,7 @@ export default function App() {
                   disabled={loading}
                 >
                   {loading ? (
-
                     <ActivityIndicator animating={true} color="#ffffff" />
-
                   ) : (
                     "Submit"
                   )}
@@ -355,55 +387,80 @@ export default function App() {
               </View>
             </>
           ) : (
-            <>{selectedChart === "Allocate" ? ( 
-            <ScrollView contentContainerStyle={styles.scrollContainer}>
-              {loading ? ( // Check loading state
-                <ActivityIndicator size="large" color="#0000ff" />
-              ) : books.length === 0 && students.length === 0 ? (
-                <Text style={styles.noDataText}>
-                  No Students & Books Available
-                </Text>
-              ) : students.length === 0 ? ( 
-                <Text style={styles.noDataText}>No Students Available</Text>
-              ) : books.length === 0 ? ( 
-                <Text style={styles.noDataText}>No Books Available</Text>
-              ) : (
-                students.map((student, index) => (
-                  <View key={index} style={styles.boxRow}>
-                    <BoxComponent
-                      index={index}
-                      student={student}
-                      data={availableBooks}
-                      text={<Text>{student.name}</Text>}
-                      onSelectBook={handleSelectBook}
-                      availableBooks={availableBooks}
-                    />
-                  </View>
-                ))
-              )}
-              {!loading && books.length > 0 && ( 
-                <View style={{ marginVertical: 20 }}>
-                  <Button
-                    icon=""
-                    mode="contained"
-                    onPress={allocateBooks}
-                    style={[
-                      styles.addButton,
-                      {
-                        backgroundColor: "#F20C0C",
-                        width: "50%",
-                        alignSelf: "center",
-                      },
-                    ]}
-                  >
-                    Submit
-                  </Button>
-                </View>
-              )}
-            </ScrollView>
-          ) : null} 
-          
-
+            <>
+              {selectedChart === "Allocate" ? (
+                <ScrollView contentContainerStyle={styles.scrollContainer}>
+                  {loading ? ( // Check loading state
+                    <ActivityIndicator size="large" color="#0000ff" />
+                  ) : books.length === 0 && students.length === 0 ? (
+                    <Text style={styles.noDataText}>
+                      No Students & Books Available
+                    </Text>
+                  ) : students.length === 0 ? (
+                    <Text style={styles.noDataText}>No Students Available</Text>
+                  ) : books.length === 0 ? (
+                    <Text style={styles.noDataText}>No Books Available</Text>
+                  ) : (
+                    students.map((student, index) => (
+                      <View key={index} style={styles.boxRow}>
+                        <BoxComponent
+                          index={index}
+                          student={student}
+                          data={availableBooks}
+                          text={<Text>{student.name}</Text>}
+                          onSelectBook={handleSelectBook}
+                          availableBooks={availableBooks}
+                        />
+                      </View>
+                    ))
+                  )}
+                  {!loading && books.length > 0 && (
+                    <View
+                      style={{
+                        marginVertical: 20,
+                        flexDirection: "row",
+                        margin: 15,
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Button
+                        icon=""
+                        mode="contained"
+                        onPress={ClearallocateBooks}
+                        style={[
+                          styles.addButton,
+                          {
+                            backgroundColor: "#F20C0C",
+                            color: "black",
+                            //borderRadius: 15,
+                            width: "40%",
+                            alignSelf: "center",
+                            // borderColor: "black", // Add border color
+                            //borderWidth: 1, // Add border width
+                          },
+                        ]}
+                      >
+                        Clear
+                      </Button>
+                      <Button
+                        icon=""
+                        mode="contained"
+                        onPress={allocateBooks}
+                        style={[
+                          styles.addButton,
+                          {
+                            backgroundColor: "#F20C0C",
+                            width: "50%",
+                            alignSelf: "center",
+                          },
+                        ]}
+                      >
+                        Submit
+                      </Button>
+                    </View>
+                  )}
+                </ScrollView>
+              ) : null}
             </>
           )}
         </View>
@@ -469,7 +526,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 16,
     color: "#333",
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   deallocateContainer: {
     flexDirection: "column",

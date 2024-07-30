@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Appbar, Text, ActivityIndicator } from "react-native-paper";
-import { StyleSheet, View, ScrollView, Animated, Easing } from "react-native";
+import { StyleSheet, View, ScrollView, Animated, Easing, StatusBar, } from "react-native";
 import * as SecureStore from "expo-secure-store";
 
 const BookBox = ({ book, index }) => {
@@ -75,6 +75,7 @@ export default function Books() {
 
   return (
     <View style={{ flex: 1 }}>
+      <StatusBar backgroundColor="#155cd4" barStyle="light-content" />
       <View style={styles.mainContainer}>
         <Animated.View style={[styles.appbar, { opacity: fadeAnim }]}>
           <Text style={styles.appbarText}>Books</Text>

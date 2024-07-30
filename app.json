@@ -10,7 +10,6 @@
       "image": "./assets/splashlogo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
-       
     },
     "assetBundlePatterns": [
       "**/*"
@@ -22,10 +21,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/splashlogo.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.libra.smmslibrary"
     },
     "web": {
       "favicon": "./assets/splashlogo.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "bdc9376b-6634-462e-8f0f-3c0eed2a7867"
+      }
     }
   }
 }
