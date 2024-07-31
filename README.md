@@ -11,6 +11,8 @@ Allocation Management: Teachers can allocate books to students and track which b
 Deallocation Process: When a book is returned, the app can handle the deallocation and update the inventory accordingly.
 
 
+[For back-end click here](https://github.com/alanjuice/sunday-library)
+
 ## Running App
 
 Clone the project
